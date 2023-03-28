@@ -3,6 +3,27 @@
 from LDE import ListaDobleEnlazada as LDE
 import random
 
+
+def puntos (valor1):
+    
+    if valor1 in ['A','J','Q','K']:
+        if valor1 =='A':
+            valor1=14
+        elif valor1== 'J':
+            valor1=11
+        elif valor1== 'Q':
+            valor1=12
+        elif valor1=='K':
+            valor1=13
+    
+    else:
+        valor1=int(valor1)
+    
+    return valor1
+
+
+
+
 class Cola_doble:
     
     def __init__(self):
@@ -50,25 +71,9 @@ class Carta:
         
         
     def __lt__(self, otro):
+       
+        return puntos(self.valor)<puntos(otro.valor)
         
-        valor1=self.valor
-        valor2=otro.valor
-        
-        if valor1 in ['A','J','Q','K']:
-            if valor1 =='A':
-                valor=14
-            elif valor1== 'J':
-                valor1=11
-            elif valor1== 'Q':
-                valor1=12
-            elif valor1=='K':
-                valor1=13
-        
-        else:
-            valor1=int(valor1)
-                
-        
-        pass
 
 class JuegoGuerra:
     
