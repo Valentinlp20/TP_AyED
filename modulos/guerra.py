@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from LDE import ListaDobleEnlazada as LDE
+from ListaDobleEnlazada import ListaDobleEnlazada as LDE
 import random
 
 
@@ -109,10 +109,10 @@ class JuegoGuerra:
         jugador2=Cola_doble()
         
         for i in range (26):
-            carta=self.mazo.sacar_fin().dato      
+            carta=self.mazo.sacar_fin()    
             jugador1.agregar_fin(carta)
             
-            carta=self.mazo.sacar_fin().dato 
+            carta=self.mazo.sacar_fin()
             jugador2.agregar_fin(carta)
         
         #__________________________________________________________________

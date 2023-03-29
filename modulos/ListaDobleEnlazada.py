@@ -55,8 +55,11 @@ class ListaDobleEnlazada:
     def __add__(self,otro):
         
         suma=self.copiar()
-        suma.cola.siguiente, otro.cabeza.anterior= otro.cabeza, suma.cola
-        suma.cola=otro.cola
+        suma2=otro.copiar()
+        
+        suma.cola.siguiente=suma2.cabeza
+        suma2.cabeza.anterior=suma.cola
+        suma.cola=suma2.cola
         
         suma.tamanio=suma.tamanio+otro.tamanio
         
@@ -109,7 +112,7 @@ class ListaDobleEnlazada:
             self.cola=nodo
             self.tamanio+=1
         
-    def insertar(self, posicion, item):
+    def insertar(self,item, posicion):
         """inserta un item a la lista en la posicion seleccionada"""
         
         posicion=int(posicion)
@@ -151,7 +154,16 @@ class ListaDobleEnlazada:
             
             
     def concatenar(self,otro):
-         return self+otro
+        
+        suma=otro.copiar()
+        
+        self.cola.siguiente=suma.cabeza
+        suma.cabeza.anterior=self.cola
+        self.cola=suma.cola
+        
+        self.tamanio+=otro.tamanio
+         
+         
             
             
             
@@ -159,7 +171,7 @@ class ListaDobleEnlazada:
         
             
     def extraer(self, posicion=None ):
-        """Retorna un nodo para una posicion dada, y lo elimina de la lista, si no se especifica
+        """Retorna el dato de un nodo para una posicion dada, y lo elimina de la lista, si no se especifica
         la posicion, retorna el ultimo elemento de la lista"""
       
         
@@ -183,7 +195,7 @@ class ListaDobleEnlazada:
             self.cola=None
             self.tamanio-=1
             
-            return nodo
+            return nodo.dato
         
         
         
@@ -202,7 +214,7 @@ class ListaDobleEnlazada:
                 actual.anterior.siguiente= None
                 self.cola=actual.anterior
                 self.tamanio -=1
-                return actual
+                return actual.dato
             
             elif actual.anterior == None:
                 #si el elemento a extraer es el primero de la lista, el nodo que sigue debe tener None como anterior
@@ -211,7 +223,7 @@ class ListaDobleEnlazada:
                 actual.siguiente.anterior=None
                 self.cabeza=actual.siguiente
                 self.tamanio-=1
-                return actual
+                return actual.dato
                          
             else:
                 #si el elemento se situa en un lugar de la lista distinto a los extremos
@@ -220,7 +232,7 @@ class ListaDobleEnlazada:
                 actual.anterior.siguiente=actual.siguiente
                 self.tamanio-=1
                 
-                return actual
+                return actual.dato
         
 
 
@@ -232,18 +244,27 @@ class ListaDobleEnlazada:
         lista_auxiliar=ListaDobleEnlazada()
         
         for nodo in self:
-            lista_auxiliar.agregar_al_final(nodo.dato)
+            lista_auxiliar.agregar_al_final(nodo)
         
         return lista_auxiliar
     
     
     def invertir(self):
         
-        for i in range(self.tamanio-1):
-            dato=self.extraer().dato
-            self.insertar(i, dato)
-        dato=self.extraer(self.tamanio-2)
-        self.agregar_al_final(dato.dato)
+        
+        ciclos=int(self.tamanio/2)
+        izquierda=self.cabeza
+        derecha=self.cola
+        
+        for i in range(ciclos):
+            
+            #intercambiamos los valores
+            izquierda.dato, derecha.dato = derecha.dato, izquierda.dato
+            izquierda=izquierda.siguiente
+            derecha=derecha.anterior
+        
+        
+        
         
         
         
@@ -270,7 +291,7 @@ class IteradorListaEnlazada:
         valor= self.actual
         self.actual=self.actual.siguiente
         
-        return valor
+        return valor.dato
         
         
         
