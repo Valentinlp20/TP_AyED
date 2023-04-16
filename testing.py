@@ -147,10 +147,11 @@ class Test_LDE(unittest.TestCase):
         nodo_actual = self.lde_2.cabeza
         nodo_anterior = None
         valor = None
+        
         while nodo_actual.siguiente:
             nodo_anterior = nodo_actual
             nodo_actual = nodo_actual.siguiente
-            valor = nodo_anterior.dato
+            valor = nodo_actual.dato
         self.assertEqual(valor, 180)
 
     def test_insertar_interior(self):
