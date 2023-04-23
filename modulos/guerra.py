@@ -29,7 +29,7 @@ def puntos (valor1):
 
 
 class Cola_doble:
-    """La cola doble, en este caso, representaría el mazo de cartas"""
+    """La cola doble, en este caso, representaría el mazo de cartas de cada jugador"""
     
     def __init__(self):
         
@@ -46,7 +46,7 @@ class Cola_doble:
     
     def agregar_fin(self,item):
         """Agrega una carta al final del mazo, que acá seria como agregar una carta en la parte
-        de arriba, igual que se agregan elementos en una pila"""
+        de arriba, igual que como se agregan elementos en una pila"""
         self.lista.agregar_al_final(item)
         
     
@@ -73,12 +73,13 @@ class Cola_doble:
     
 #_________________________________________________________________CARTA
 class Carta:
-    """Modela una carta del la baraja"""
+    """Modela una carta de la baraja"""
     
     
     def __init__(self,palo, valor):
         self.palo=palo
         self.valor=valor
+        #por defecto la carta esta boca abajo
         self.boca_arriba=False
     
     def __str__(self):
@@ -103,6 +104,16 @@ class Carta:
 class JuegoGuerra:
     
     def __init__(self):
+        
+        
+        #atributos auxiliares para imprimir el juego por consola
+        #__________________________________________________________________
+        self.actual_jugador1=''
+        self.actual_jugador2=''
+        self.actual_disputadas='' 
+        #__________________________________________________________________
+        
+        
         
         
         
@@ -159,22 +170,34 @@ class JuegoGuerra:
         while resultado=='' and self.turnos < 10000:
             
             resultado=self.duelo()
-            self.turnos+=1
             
+            #condicional para evitar que el ultimo turno se imprima 2 veces
+            if resultado=='':
+                self.mostrar()
+                self.turnos+=1
+            
+            #comprobamos que no se hayan perdido cartas
             if len(self.jugador1) + len(self.jugador2) != 52: 
                 print("TURNO: ",self.turnos)
                 print('JUGADOR 1: ',len(self.jugador1))
                 print('JUGADOR 2: ',len(self.jugador2))
+                print(self.ultima_accion)
                 raise ValueError('Se perdieron cartas')
+                
+            
         
         if resultado==1:
-            print('gana jugador 1')
+            self.registrar_mazos()
+            self.mostrar()
+            print('***** jugador 1 gana la partida *****'.center(60))
             
         elif resultado==2:
-            print('gana jugador 2')
+            self.registrar_mazos()
+            self.mostrar()
+            print('***** jugador 2 gana la partida *****'.center(60))
         
         else:
-            print('EMPATE')
+            print('***** EMPATE *****'.center(60))
         
         
         
@@ -183,6 +206,7 @@ class JuegoGuerra:
         """Toma una carta de cada jugador para comparar, retorna el valor entero 1 o 2 dependiendo
         de si se decidio un ganador en el duelo, de lo contrario retorna un string vacío
         para indicar que el juego sigue"""
+        
         
         
         #intenta sacar carta del jugador 1, si no se puede, es que se quedó sin cartas
@@ -196,7 +220,12 @@ class JuegoGuerra:
         try:
             carta2=self.jugador2.sacar_fin()
         except:
+            self.jugador1.agregar_in(carta1)
             return 1
+        
+        
+        
+        self.registrar_mazos()              #Los mazos se guardan en el estado actual
         
         
         
@@ -220,7 +249,7 @@ class JuegoGuerra:
        
         
         cartas_en_duelo=str(carta1)+' '+str(carta2)
-        print(cartas_en_duelo.center(60))
+        self.actual_disputadas=cartas_en_duelo
         
         
         #volvemos a ponerlas boca abajo 
@@ -229,6 +258,10 @@ class JuegoGuerra:
         if carta2.boca_arriba==True:
             carta2.voltear()
         
+        if len(self.jugador1)==0:
+            return 2
+        if len(self.jugador2)==0:
+            return 1
         
         
         return ''
@@ -239,9 +272,15 @@ class JuegoGuerra:
         """Se ejecuta si hay un empate en el duelo"""
         
         
+        
+        
         if cartas_en_guerra==None:
             cartas_en_guerra=LDE()
         
+        if carta1.boca_arriba==False:
+            carta1.voltear()
+        if carta2.boca_arriba==False:
+            carta2.voltear()
         
         
         cartas_en_guerra.agregar_al_final(carta1)
@@ -254,6 +293,8 @@ class JuegoGuerra:
                 # Si algun jugador se queda sin cartas, pierde el juego             
                 try:
                     cartas_en_guerra.agregar_al_final(self.jugador1.sacar_fin())
+                    self.actual_disputadas=cartas_en_guerra
+                    self.registrar_mazos()
                 except:
                     for carta in cartas_en_guerra:
                         self.jugador2.agregar_in(carta)
@@ -261,6 +302,8 @@ class JuegoGuerra:
                 
                 try:
                     cartas_en_guerra.agregar_al_final(self.jugador2.sacar_fin())
+                    self.registrar_mazos()
+                    self.actual_disputadas=cartas_en_guerra
                 except:
                     for carta in cartas_en_guerra:
                         self.jugador1.agregar_in(carta)
@@ -274,16 +317,20 @@ class JuegoGuerra:
         
         try:
             carta_jugador1=self.jugador1.sacar_fin()
+            
         except:
             for carta in cartas_en_guerra:
+                
                 self.jugador2.agregar_in(carta)
             return 2
         
         try:
             carta_jugador2=self.jugador2.sacar_fin()
+            
         except:
             cartas_en_guerra.agregar_al_final(carta_jugador1)
             for carta in cartas_en_guerra:
+                
                 self.jugador1.agregar_in(carta)
             return 1
         
@@ -300,9 +347,7 @@ class JuegoGuerra:
             carta_jugador2.voltear()
             
             cartas_en_guerra.agregar_al_final(carta_jugador1)
-            cartas_en_guerra.agregar_al_final(carta_jugador2)        
-            
-            print(cartas_en_guerra)          
+            cartas_en_guerra.agregar_al_final(carta_jugador2)                    
             ganador=self.jugador1
         
         #gana el jugador 2
@@ -313,13 +358,26 @@ class JuegoGuerra:
             
             cartas_en_guerra.agregar_al_final(carta_jugador1)
             cartas_en_guerra.agregar_al_final(carta_jugador2)        
-            
-            print(cartas_en_guerra)          
             ganador=self.jugador2
         
         #en caso de que ambas cartas sean iguales
         else:
             return self.guerra(carta_jugador1, carta_jugador2, cartas_en_guerra)
+        
+        
+        
+        
+        
+        
+        #Guardo cartas en guerra en un string
+        #_____________________________________________________________
+        self.actual_disputadas=str(cartas_en_guerra)
+        self.actual_disputadas=self.actual_disputadas.replace('[','')
+        self.actual_disputadas=self.actual_disputadas.replace(']','')
+        #_____________________________________________________________
+        
+        
+        
         
         
         # repartimos las cartas al ganador
@@ -342,10 +400,38 @@ class JuegoGuerra:
         
         
             
-       
+       #_______________________________________________________________________
+       #
+       #______________________FUNCIONES PARA IMPRIMIR EN CONSOLA_______________
+       #_______________________________________________________________________
         
         
-        
+    def registrar_mazos(self):
+            """guardo en strings los mazos actuales de cada jugador"""
+            
+            
+            self.actual_jugador1=str(self.jugador1)
+            self.actual_jugador2=str(self.jugador2)
+            
+            #quitamos corchetes
+            self.actual_jugador1, self.actual_jugador2= self.actual_jugador1.replace('[',''), self.actual_jugador2.replace('[','')
+            self.actual_jugador1, self.actual_jugador2= self.actual_jugador1.replace(']',''), self.actual_jugador2.replace(']','')
+            
+            
+            #quitamos comas
+            self.actual_jugador1=self.actual_jugador1.replace(',','')
+            self.actual_jugador2=self.actual_jugador2.replace(',','')
+            
+    def mostrar(self):
+           print('\n') 
+           print('_____________________________________________________')
+           print('Turno: ',self.turnos)
+           print('Jugador 1:')
+           print(self.actual_jugador1)
+           print('\n',self.actual_disputadas,'\n')
+           print('Jugador 2:')
+           print(self.actual_jugador2)
+           print('_____________________________________________________')
         
         
         
@@ -361,11 +447,8 @@ if __name__ == '__main__':
     
 
     juego.iniciar_juego()
-    
-    print('tamaño 1 ',len(juego.jugador1))
-    print('tamaño 2 ',len(juego.jugador2))
-    print('turnos: ',juego.turnos)
-   
+    # print(juego.jugador1)
+    # print(juego.jugador2)
     
     
     
