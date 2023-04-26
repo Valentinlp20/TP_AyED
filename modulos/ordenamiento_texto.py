@@ -3,7 +3,7 @@
 import time
 
 def ordenamiento_mezcla(lista):
-    """aplica algoritmo de merge sort sobre una lista de python"""
+    """aplica algoritmo de merge sort sobre una lista de python y retorna la lista ordenada"""
     
     #si la lista tiene mas de un elemento se divide por la mitad
     if len(lista) > 1:
@@ -18,8 +18,13 @@ def ordenamiento_mezcla(lista):
         
         
         
+        
         indice_actual_izquierdo = indice_actual_derecho = indice_resultado = 0
         
+        
+        #ordenar y reagrupar 
+        
+        #recorremos ambas mitades, y comparamos elementos para ordenarlos en la lista
         while indice_actual_izquierdo < len(izquierda) and indice_actual_derecho < len(derecha):
             if izquierda[indice_actual_izquierdo] < derecha[indice_actual_derecho]:
                 lista[indice_resultado] = izquierda[indice_actual_izquierdo]
@@ -79,15 +84,12 @@ if __name__ == '__main__':
     
     
     
-    # print(datos[:50])
-    inicio=time.time()
-    
-    ordenamiento_previo(datos, 500)
     datos_ordenados=ordenamiento_mezcla(datos)
-    fin=time.time()
-    print('\n')
-    # print(datos_ordenados[:50])
-    print('\ntiempo: ',round(fin-inicio,2))
+    
+    with open('datos_ordenados.txt','w',encoding='utf-8') as archivo:
+        
+        for numero in datos_ordenados:
+            archivo.write(str(str(numero)+'\n'))
     
     
     
