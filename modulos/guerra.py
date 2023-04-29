@@ -103,7 +103,7 @@ class Carta:
 #_____________________________________________________________________JUEGO 
 class JuegoGuerra:
     
-    def __init__(self):
+    def __init__(self,random_seed=None):
         
         
         #atributos auxiliares para imprimir el juego por consola
@@ -123,19 +123,29 @@ class JuegoGuerra:
         valores = ['2','3','4','5','6','7','8','9','10','J','Q','K','A']
         palos = ['♠', '♥', '♦', '♣']
         
-        random.shuffle(valores)
-        random.shuffle(palos)
+        # random.shuffle(valores)
+        # random.shuffle(palos)
         
-        cartas=Cola_doble()
+        cartas=[]
         
         for palo in palos:
             for valor in valores:
                 carta=Carta(palo, valor)
-                cartas.agregar_fin(carta)
+                # cartas.agregar_fin(carta)
+                cartas.append(carta)
         #__________________________________________________________________
         
+        if random_seed!=None:
+            random.seed(random_seed)
+            
+        random.shuffle(cartas)
+        mazo=Cola_doble()
         
-        self.mazo= cartas
+        for carta in cartas:
+            mazo.agregar_fin(carta)
+        
+        
+        self.mazo= mazo
         
         
         
@@ -170,6 +180,7 @@ class JuegoGuerra:
         while resultado=='' and self.turnos < 10000:
             
             resultado=self.duelo()
+            
             
             #condicional para evitar que el ultimo turno se imprima 2 veces
             if resultado=='':
@@ -428,6 +439,9 @@ class JuegoGuerra:
            print('Turno: ',self.turnos)
            print('Jugador 1:')
            print(self.actual_jugador1)
+           self.actual_disputadas=str(self.actual_disputadas).replace('[','')
+           self.actual_disputadas=str(self.actual_disputadas).replace(']','')
+           self.actual_disputadas=str(self.actual_disputadas).replace(',','')
            print('\n',self.actual_disputadas,'\n')
            print('Jugador 2:')
            print(self.actual_jugador2)
@@ -447,8 +461,7 @@ if __name__ == '__main__':
     
 
     juego.iniciar_juego()
-    # print(juego.jugador1)
-    # print(juego.jugador2)
+   
     
     
     

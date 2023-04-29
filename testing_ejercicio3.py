@@ -4,6 +4,7 @@
 from modulos.ordenamiento_texto import ordenamiento_mezcla, ordenamiento_previo
 import unittest
 from random import randint
+import os
 
 
 class Test_ordenamiento(unittest.TestCase):
@@ -62,6 +63,29 @@ class Test_ordenamiento(unittest.TestCase):
     def test_tamaño_archivo(self):
         """Generamos un archivo de texto con la lista desordenada y ordenada para verificar que ambas tengan el mismo tamaño"""
         
+        lista_ordenada=ordenamiento_mezcla(self.lista_desordenada)
+       
+       
+        
+        with open('testing_desordenado','w',encoding='utf-8') as archivo:
+            
+            for i in range(len(self.lista_desordenada)):
+                archivo.write(str  (str(self.lista_desordenada[i])+'\n')   )
+                
+        tamanio_desordenado=os.path.getsize('testing_desordenado')
+        
+        with open('testing_ordenado','w',encoding='utf-8') as archivo:
+            
+            for i in range(len(lista_ordenada)):
+                
+                archivo.write(str(   str(lista_ordenada[i])+'\n'))
+                
+        tamanio_ordenado=os.path.getsize('testing_ordenado')
+        
+        self.assertEqual(tamanio_ordenado, tamanio_desordenado,'Los tamaños de los archivos no coinciden')        
+        
+            
+                
                 
             
 

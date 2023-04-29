@@ -66,14 +66,12 @@ def ordenamiento_previo(lista, b):
         #reemplazo los valores en la lista original con los del segmento ordenado
         lista[i:i+b] = segmento
     
-
-
-    
-    
+      
 
 if __name__ == '__main__':
     
     datos=[]
+    print('ordenando datos. . .')
     with open ('datos.txt','r',encoding='utf-8') as archivo:
     
         
@@ -82,10 +80,10 @@ if __name__ == '__main__':
             datos.append(int(dato))
             
     
-    
-    
+    inicio=time.time()
     datos_ordenados=ordenamiento_mezcla(datos)
-    
+    fin=time.time()
+    print('Datos ordenados! ', round(fin-inicio,2), ' segundos')
     with open('datos_ordenados.txt','w',encoding='utf-8') as archivo:
         
         for numero in datos_ordenados:
