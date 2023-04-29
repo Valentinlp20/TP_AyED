@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from random import randint
+
 
 class Nodo ():
     
@@ -138,30 +140,39 @@ class ListaDobleEnlazada:
 
             
     def ordenar(self):    
-        """ Ordena la lista utilizando el algoritmo de ordenamiento burbuja"""
+        """ Ordena la lista utilizando el algoritmo de ordenamiento insercion"""
         
-        intercambiado = True
-        while intercambiado:
-            intercambiado = False
-            nodo_actual = self.cabeza
+        
+        if self.esta_vacia:
+            return
+        
+        nodo_actual =self.cabeza.siguiente
+        while nodo_actual is not None:
+            dato = nodo_actual.dato
+            nodo_comparar = nodo_actual.anterior
             
-            while nodo_actual is not None and nodo_actual.siguiente is not None:
-                if nodo_actual.dato > nodo_actual.siguiente.dato:
-                    # Intercambia los valores de los nodos
-                    nodo_actual.dato, nodo_actual.siguiente.dato = nodo_actual.siguiente.dato, nodo_actual.dato
-                    intercambiado = True
-                nodo_actual = nodo_actual.siguiente       
+            while nodo_comparar is not None and nodo_comparar.dato > dato:
+                nodo_comparar.siguiente.dato = nodo_comparar.dato
+                nodo_comparar = nodo_comparar.anterior
+            
+            if nodo_comparar is None:
+                self.cabeza.dato = dato
+            else:
+                nodo_comparar.siguiente.dato = dato
+            
+            nodo_actual = nodo_actual.siguiente
             
             
+                
     def concatenar(self,otro):
-        
-        suma=otro.copiar()
-        
-        self.cola.siguiente=suma.cabeza
-        suma.cabeza.anterior=self.cola
-        self.cola=suma.cola
-        
-        self.tamanio+=otro.tamanio
+            
+            suma=otro.copiar()
+            
+            self.cola.siguiente=suma.cabeza
+            suma.cabeza.anterior=self.cola
+            self.cola=suma.cola
+            
+            self.tamanio+=otro.tamanio
          
          
             
@@ -294,6 +305,21 @@ class IteradorListaEnlazada:
         return valor.dato
         
         
+
+
+if __name__ =='__main__':
+        
+    
+        lista=ListaDobleEnlazada()
+        valores=[randint(0,356) for x in range(50)]
+        for valor in valores:
+            lista.agregar_al_final(valor)
         
         
+        print(lista)
+        
+        lista.ordenar()
+        
+        print(lista)
+            
         
