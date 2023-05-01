@@ -56,6 +56,9 @@ class ListaDobleEnlazada:
     
     def __add__(self,otro):
         
+        """recibe una lista y la concatena a la lista original, retorna otra lista
+        doblemente enlazada como resultado, sin alterar las listas originales"""
+        
         suma=self.copiar()
         suma2=otro.copiar()
         
@@ -143,24 +146,26 @@ class ListaDobleEnlazada:
         """ Ordena la lista utilizando el algoritmo de ordenamiento insercion"""
         
         
-        if self.esta_vacia:
+        #si la lista esta vacia entonces ya esta ordenada
+        if self.esta_vacia():                                                   # O(1)
             return
         
-        nodo_actual =self.cabeza.siguiente
-        while nodo_actual is not None:
-            dato = nodo_actual.dato
-            nodo_comparar = nodo_actual.anterior
+        
+        nodo_actual =self.cabeza.siguiente                                      # O(1)
+        while nodo_actual is not None:                                          # O(n)
+            dato = nodo_actual.dato                                             # O(n)
+            nodo_comparar = nodo_actual.anterior                                # O(n)
             
-            while nodo_comparar is not None and nodo_comparar.dato > dato:
-                nodo_comparar.siguiente.dato = nodo_comparar.dato
-                nodo_comparar = nodo_comparar.anterior
+            while nodo_comparar is not None and nodo_comparar.dato > dato:      # O(n**2)
+                nodo_comparar.siguiente.dato = nodo_comparar.dato               # O(n**2)
+                nodo_comparar = nodo_comparar.anterior                          # O(n**2)
             
-            if nodo_comparar is None:
-                self.cabeza.dato = dato
+            if nodo_comparar is None:                                           # O(n)
+                self.cabeza.dato = dato                                         # O(n)
             else:
-                nodo_comparar.siguiente.dato = dato
+                nodo_comparar.siguiente.dato = dato                             # O(n)
             
-            nodo_actual = nodo_actual.siguiente
+            nodo_actual = nodo_actual.siguiente                                 # O(n)
             
             
                 
@@ -261,7 +266,7 @@ class ListaDobleEnlazada:
     
     
     def invertir(self):
-        
+        """invierte el orden de los elementos dentro de la lista"""
         
         ciclos=int(self.tamanio/2)
         izquierda=self.cabeza

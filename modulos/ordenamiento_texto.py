@@ -14,10 +14,7 @@ def ordenamiento_mezcla(lista):
         #llamada recursiva para seguir dividiendo las sublistas
         ordenamiento_mezcla(izquierda)
         ordenamiento_mezcla(derecha)
-        
-        
-        
-        
+             
         
         indice_actual_izquierdo = indice_actual_derecho = indice_resultado = 0
         

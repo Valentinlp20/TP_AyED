@@ -193,7 +193,7 @@ class JuegoGuerra:
                 print('JUGADOR 1: ',len(self.jugador1))
                 print('JUGADOR 2: ',len(self.jugador2))
                 print(self.ultima_accion)
-                raise ValueError('Se perdieron cartas')
+                raise ValueError('Se perdieron o agregaron cartas! !')
                 
             
         
@@ -271,11 +271,10 @@ class JuegoGuerra:
         
         if len(self.jugador1)==0:
             return 2
-        if len(self.jugador2)==0:
+        elif len(self.jugador2)==0:
             return 1
-        
-        
-        return ''
+        else:
+            return ''
     
 
 
@@ -307,6 +306,8 @@ class JuegoGuerra:
                     self.actual_disputadas=cartas_en_guerra
                     self.registrar_mazos()
                 except:
+                    self.registrar_mazos()
+                    self.registrar_guerra(cartas_en_guerra)
                     for carta in cartas_en_guerra:
                         self.jugador2.agregar_in(carta)
                     return 2
@@ -316,6 +317,9 @@ class JuegoGuerra:
                     self.registrar_mazos()
                     self.actual_disputadas=cartas_en_guerra
                 except:
+                    self.registrar_mazos()
+                    self.registrar_guerra(cartas_en_guerra)
+                    
                     for carta in cartas_en_guerra:
                         self.jugador1.agregar_in(carta)
                     return 1
@@ -330,6 +334,8 @@ class JuegoGuerra:
             carta_jugador1=self.jugador1.sacar_fin()
             
         except:
+            self.registrar_mazos()
+            self.registrar_guerra(cartas_en_guerra)
             for carta in cartas_en_guerra:
                 
                 self.jugador2.agregar_in(carta)
@@ -339,7 +345,10 @@ class JuegoGuerra:
             carta_jugador2=self.jugador2.sacar_fin()
             
         except:
+            
             cartas_en_guerra.agregar_al_final(carta_jugador1)
+            self.registrar_mazos()
+            self.registrar_guerra(cartas_en_guerra)
             for carta in cartas_en_guerra:
                 
                 self.jugador1.agregar_in(carta)
@@ -379,13 +388,8 @@ class JuegoGuerra:
         
         
         
-        
-        #Guardo cartas en guerra en un string
-        #_____________________________________________________________
-        self.actual_disputadas=str(cartas_en_guerra)
-        self.actual_disputadas=self.actual_disputadas.replace('[','')
-        self.actual_disputadas=self.actual_disputadas.replace(']','')
-        #_____________________________________________________________
+        self.registrar_mazos()
+        self.registrar_guerra(cartas_en_guerra)
         
         
         
@@ -433,6 +437,8 @@ class JuegoGuerra:
             self.actual_jugador1=self.actual_jugador1.replace(',','')
             self.actual_jugador2=self.actual_jugador2.replace(',','')
             
+            
+            
     def mostrar(self):
            print('\n') 
            print('_____________________________________________________')
@@ -451,8 +457,13 @@ class JuegoGuerra:
         
         
         
-        
-
+    def registrar_guerra(self,cartas_en_guerra):
+        #Guardo cartas en guerra en un string
+        #_____________________________________________________________
+        self.actual_disputadas=str(cartas_en_guerra)
+        self.actual_disputadas=self.actual_disputadas.replace('[','')
+        self.actual_disputadas=self.actual_disputadas.replace(']','')
+        #_____________________________________________________________
 
 if __name__ == '__main__':
     
