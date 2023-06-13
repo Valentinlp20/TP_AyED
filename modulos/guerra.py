@@ -1,105 +1,14 @@
 # -*- coding: utf-8 -*-
 
 
+from colaDoble import Cola_doble
 from ListaDobleEnlazada import ListaDobleEnlazada as LDE
+from carta import Carta
 import random
 
 
-def puntos (valor1):
-    """Calcula los puntos a una carta para su comparacion"""
-    
-    if valor1 in ['A','J','Q','K']:
-        if valor1 =='A':
-            valor1=14
-        elif valor1== 'J':
-            valor1=11
-        elif valor1== 'Q':
-            valor1=12
-        elif valor1=='K':
-            valor1=13
-    
-    else:
-        valor1=int(valor1)
-    
-    return valor1
 
-
-
-#_______________________________________________________________COLA DOBLE
-
-
-class Cola_doble:
-    """La cola doble, en este caso, representaría el mazo de cartas de cada jugador"""
-    
-    def __init__(self):
         
-        self.lista=LDE()
-       
-    
-   
-    def agregar_in(self, item):
-        """Para agregar cartas al inicio del mazo, que para este caso consideré que
-        el mazo comiense de abajo hacia arriba, asi que agrega una carta por abajo del mazo"""
-        self.lista.agregar_al_inicio(item)
-        
-    
-    
-    def agregar_fin(self,item):
-        """Agrega una carta al final del mazo, que acá seria como agregar una carta en la parte
-        de arriba, igual que como se agregan elementos en una pila"""
-        self.lista.agregar_al_final(item)
-        
-    
-    
-    def sacar_in(self):
-        """Extrae la carta de la parte baja del mazo """
-        
-        return self.lista.extraer(0)
-    
-    def sacar_fin(self):
-        """Extrae un elemento del final del mazo, o la parte de arriba del mismo"""
-        
-        return self.lista.extraer(self.lista.tamanio -1)
-    
-    def __str__(self):
-        return str(self.lista)
-    
-    def __len__(self):
-        return self.lista.tamanio
-    
-    
-    
-        
-    
-#_________________________________________________________________CARTA
-class Carta:
-    """Modela una carta de la baraja"""
-    
-    
-    def __init__(self,palo, valor):
-        self.palo=palo
-        self.valor=valor
-        #por defecto la carta esta boca abajo
-        self.boca_arriba=False
-    
-    def __str__(self):
-        if self.boca_arriba:
-            return self.valor + self.palo
-        else:
-            return "-X"
-        
-    def voltear(self):
-        self.boca_arriba=not self.boca_arriba
-        
-        
-    def __lt__(self, otro):     
-        return puntos(self.valor)<puntos(otro.valor)
-    
-    def __eq__(self, otro):
-        return puntos(self.valor)==puntos(otro.valor)
-        
-        
-
 #_____________________________________________________________________JUEGO 
 class JuegoGuerra:
     
@@ -425,18 +334,10 @@ class JuegoGuerra:
             """guardo en strings los mazos actuales de cada jugador"""
             
             
-            self.actual_jugador1=str(self.jugador1)
-            self.actual_jugador2=str(self.jugador2)
+            self.actual_jugador1=str('X- '*len(self.jugador1))
+            self.actual_jugador2=str('X- '*len(self.jugador2))
             
-            #quitamos corchetes
-            self.actual_jugador1, self.actual_jugador2= self.actual_jugador1.replace('[',''), self.actual_jugador2.replace('[','')
-            self.actual_jugador1, self.actual_jugador2= self.actual_jugador1.replace(']',''), self.actual_jugador2.replace(']','')
-            
-            
-            #quitamos comas
-            self.actual_jugador1=self.actual_jugador1.replace(',','')
-            self.actual_jugador2=self.actual_jugador2.replace(',','')
-            
+        
             
             
     def mostrar(self):
