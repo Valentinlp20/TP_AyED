@@ -259,8 +259,8 @@ class ListaDobleEnlazada:
         
         lista_auxiliar=ListaDobleEnlazada()
         
-        for nodo in self:
-            lista_auxiliar.agregar_al_final(nodo)
+        for dato in self:
+            lista_auxiliar.agregar_al_final(dato)
         
         return lista_auxiliar
     
@@ -268,16 +268,28 @@ class ListaDobleEnlazada:
     def invertir(self):
         """invierte el orden de los elementos dentro de la lista"""
         
-        ciclos=int(self.tamanio/2)
-        izquierda=self.cabeza
-        derecha=self.cola
         
-        for i in range(ciclos):
+        #Ahora los elementos de la lista se invierten intercambiando las referencias
+        # de anterior y siguiente para cada nodo
+       
+        
+        
+        #si la lista esta vacia o tiene un solo elemento no se hace nada
+        if self.tamanio < 2:
+            return
+    
+        nodo_actual = self.cabeza
+        
+        while nodo_actual != None:
+            nodo_actual.anterior, nodo_actual.siguiente = nodo_actual.siguiente, nodo_actual.anterior
+    
+            # Avanzar al siguiente nodo
+            nodo_actual = nodo_actual.anterior
+    
+        # Intercambiar la cabeza y la cola de la lista
+        self.cabeza, self.cola = self.cola, self.cabeza
             
-            #intercambiamos los valores
-            izquierda.dato, derecha.dato = derecha.dato, izquierda.dato
-            izquierda=izquierda.siguiente
-            derecha=derecha.anterior
+      
         
         
         
@@ -316,15 +328,17 @@ if __name__ =='__main__':
         
     
         lista=ListaDobleEnlazada()
-        valores=[randint(0,356) for x in range(50)]
+        valores=[randint(0,356) for x in range(30)]
         for valor in valores:
             lista.agregar_al_final(valor)
         
         
-        print(lista)
         
         lista.ordenar()
         
         print(lista)
-            
+        
+        lista.invertir()
+        
+        print(lista)
         
